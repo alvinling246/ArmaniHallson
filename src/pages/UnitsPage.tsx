@@ -1,15 +1,15 @@
 import { motion } from 'motion/react';
+import { useState } from 'react';
 import { ImageWithFallback } from '../components/figma/ImageWithFallback';
 import { Footer } from '../components/Footer';
-import { useState } from 'react';
 
 // SOVO Floor Plans
-import sovoA1 from '../assets/sovo_floorplans/Sovo A 1.png';
-import sovoA2 from '../assets/sovo_floorplans/Sovo A 2.png';
-import sovoB1_1 from '../assets/sovo_floorplans/Sovo B 1.jpg';
-import sovoB1_2 from '../assets/sovo_floorplans/Sovo B 2.jpg';
-import sovoB1Type1 from '../assets/sovo_floorplans/Sovo B1 1.jpg';
-import sovoB1Type2 from '../assets/sovo_floorplans/Sovo B1 2.jpg';
+import sovoA1 from '../assets/sovo_floorplans/Sovo A 1.jpg';
+import sovoA2 from '../assets/sovo_floorplans/Sovo A 2.jpg';
+import sovoB1 from '../assets/sovo_floorplans/Sovo B 1.jpg';
+import sovoB2 from '../assets/sovo_floorplans/Sovo B 2.jpg';
+import sovoB1_1 from '../assets/sovo_floorplans/Sovo B1 1.jpg';
+import sovoB1_2 from '../assets/sovo_floorplans/Sovo B1 2.jpg';
 import sovoC1 from '../assets/sovo_floorplans/Sovo C 1.jpg';
 import sovoC2 from '../assets/sovo_floorplans/Sovo C 2.jpg';
 import sovoD1 from '../assets/sovo_floorplans/Sovo D 1.jpg';
@@ -26,276 +26,335 @@ import sohoB1 from '../assets/soho_floorplans/Soho B 1.jpg';
 import sohoB2 from '../assets/soho_floorplans/Soho B 2.jpg';
 
 export function UnitsPage() {
-  const [activeTab, setActiveTab] = useState<'sovo' | 'soho'>('sovo');
-  const [sovoActiveUnit, setSovoActiveUnit] = useState<'A' | 'B' | 'B1' | 'C' | 'D' | 'E'>('A');
-  const [sohoActiveUnit, setSohoActiveUnit] = useState<'A' | 'ACorner' | 'B'>('A');
+  const [activeCategory, setActiveCategory] = useState<'sovo' | 'soho'>('sovo');
+  const [activeUnit, setActiveUnit] = useState<string>('A');
 
-  const sovoUnits = {
-    A: { images: [sovoA1, sovoA2], name: 'SOVO A', area: '72.05m²', levels: 'Level 10 - Level 65' },
-    B: { images: [sovoB1_1, sovoB1_2], name: 'SOVO B', area: '85.50m²', levels: 'Level 10 - Level 65' },
-    B1: { images: [sovoB1Type1, sovoB1Type2], name: 'SOVO B1', area: '92.10m²', levels: 'Level 10 - Level 65' },
-    C: { images: [sovoC1, sovoC2], name: 'SOVO C', area: '105.80m²', levels: 'Level 10 - Level 65' },
-    D: { images: [sovoD1, sovoD2], name: 'SOVO D', area: '118.50m²', levels: 'Level 10 - Level 65' },
-    E: { images: [sovoE1, sovoE2], name: 'SOVO E', area: '135.20m²', levels: 'Level 10 - Level 65' }
+  // Unit data structure
+  const unitData = {
+    sovo: {
+      A: {
+        name: 'SOVO A',
+        area: '72.05',
+        levels: 'Level 10 - Level 65',
+        floorPlan: sovoA1,
+        elevation: sovoA2,
+        dimensions: { width: '5940', height: '7726' }
+      },
+      B: {
+        name: 'SOVO B',
+        area: '77.15',
+        levels: 'Level 10 - Level 65',
+        floorPlan: sovoB1,
+        elevation: sovoB2,
+        dimensions: { width: '6200', height: '7726' }
+      },
+      B1: {
+        name: 'SOVO B1',
+        area: '82.30',
+        levels: 'Level 10 - Level 65',
+        floorPlan: sovoB1_1,
+        elevation: sovoB1_2,
+        dimensions: { width: '6450', height: '7726' }
+      },
+      C: {
+        name: 'SOVO C',
+        area: '85.45',
+        levels: 'Level 10 - Level 65',
+        floorPlan: sovoC1,
+        elevation: sovoC2,
+        dimensions: { width: '6700', height: '7726' }
+      },
+      D: {
+        name: 'SOVO D',
+        area: '88.60',
+        levels: 'Level 10 - Level 65',
+        floorPlan: sovoD1,
+        elevation: sovoD2,
+        dimensions: { width: '6950', height: '7726' }
+      },
+      E: {
+        name: 'SOVO E',
+        area: '91.75',
+        levels: 'Level 10 - Level 65',
+        floorPlan: sovoE1,
+        elevation: sovoE2,
+        dimensions: { width: '7200', height: '7726' }
+      }
+    },
+    soho: {
+      A: {
+        name: 'SOHO A',
+        area: '65.50',
+        levels: 'Level 66 - Level 87',
+        floorPlan: sohoA1,
+        elevation: sohoA2,
+        dimensions: { width: '5600', height: '7100' }
+      },
+      B: {
+        name: 'SOHO B',
+        area: '70.25',
+        levels: 'Level 66 - Level 87',
+        floorPlan: sohoACorner1,
+        elevation: sohoACorner2,
+        dimensions: { width: '5850', height: '7100' }
+      },
+      B1: {
+        name: 'SOHO B1',
+        area: '75.40',
+        levels: 'Level 66 - Level 87',
+        floorPlan: sohoB1,
+        elevation: sohoB2,
+        dimensions: { width: '6100', height: '7100' }
+      },
+      C: {
+        name: 'SOHO C',
+        area: '78.80',
+        levels: 'Level 66 - Level 87',
+        floorPlan: sohoB1,
+        elevation: sohoB2,
+        dimensions: { width: '6350', height: '7100' }
+      },
+      D: {
+        name: 'SOHO D',
+        area: '82.15',
+        levels: 'Level 66 - Level 87',
+        floorPlan: sohoB1,
+        elevation: sohoB2,
+        dimensions: { width: '6600', height: '7100' }
+      },
+      E: {
+        name: 'SOHO E',
+        area: '85.50',
+        levels: 'Level 66 - Level 87',
+        floorPlan: sohoB1,
+        elevation: sohoB2,
+        dimensions: { width: '6850', height: '7100' }
+      }
+    }
   };
 
-  const sohoUnits = {
-    A: { images: [sohoA1, sohoA2], name: 'SOHO A', area: '58.30m²', levels: 'Level 33 - Level 65' },
-    ACorner: { images: [sohoACorner1, sohoACorner2], name: 'SOHO A Corner', area: '78.60m²', levels: 'Level 33 - Level 65' },
-    B: { images: [sohoB1, sohoB2], name: 'SOHO B', area: '95.40m²', levels: 'Level 33 - Level 65' }
-  };
+  const currentUnit = unitData[activeCategory][activeUnit];
+  const availableUnits = Object.keys(unitData[activeCategory]);
 
   return (
-    <div className="min-h-screen bg-black">
-      {/* Hero Section */}
-      <section className="relative h-[60vh] min-h-[500px] flex items-center justify-center overflow-hidden pt-20">
-        <div className="absolute inset-0 bg-gradient-to-b from-black via-black/50 to-black z-10"></div>
-        <div className="absolute inset-0 top-20">
-          <ImageWithFallback
-            src="https://images.unsplash.com/photo-1502672260066-6bc869c1e63a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxsdXh1cnklMjBoaWdocmlzZSUyMGJ1aWxkaW5nfGVufDF8fHx8MTczNzAyMjkxN3ww&ixlib=rb-4.1.0&q=80&w=1080"
-            alt="Armani Hallson KLCC Unit Types"
-            className="w-full h-full object-cover"
-          />
-        </div>
-        <div className="relative z-20 text-center px-6 max-w-4xl">
-          <motion.h1
-            className="text-5xl md:text-7xl font-serif text-white mb-6"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-          >
-            Floor Plans
-          </motion.h1>
-          <motion.p
-            className="text-xl text-white/80"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-          >
-            Explore our thoughtfully designed unit layouts
-          </motion.p>
-        </div>
-      </section>
-
-      {/* Floor Plans Section */}
-      <section className="py-20 px-6 bg-black">
+    <div className="min-h-screen" style={{ backgroundColor: '#000000' }}>
+      {/* Main Content */}
+      <section className="pb-20 px-6" style={{ paddingTop: '100px' }}>
         <div className="max-w-7xl mx-auto">
-          {/* Main Tabs - SOVO / SOHO */}
+          {/* Heading */}
           <motion.div
-            className="flex justify-center gap-8 mb-16"
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
           >
-            <button
-              onClick={() => setActiveTab('sovo')}
-              className={`text-2xl font-serif pb-4 border-b-2 transition-colors text-white ${
-                activeTab === 'sovo'
-                  ? 'border-amber-500'
-                  : 'border-black hover:border-black'
-              }`}
+            <h1 
+              className="text-5xl md:text-6xl text-center mb-16 tracking-wide"
+              style={{ 
+                fontFamily: 'serif',
+                color: '#ffffff'
+              }}
             >
-              SOVO
-            </button>
-            <button
-              onClick={() => setActiveTab('soho')}
-              className={`text-2xl font-serif pb-4 border-b-2 transition-colors text-white ${
-                activeTab === 'soho'
-                  ? 'border-amber-500'
-                  : 'border-black hover:border-black'
-              }`}
-            >
-              SOHO
-            </button>
+              FLOOR PLANS
+            </h1>
           </motion.div>
 
-          {/* SOVO Section */}
-          {activeTab === 'sovo' && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.5 }}
+          {/* Category Tabs: SOVO / SOHO */}
+          <div className="flex justify-center mb-12" style={{ gap: '120px' }}>
+            <button
+              onClick={() => {
+                setActiveCategory('sovo');
+                setActiveUnit('A');
+              }}
+              className="relative pb-2 text-2xl tracking-wider transition-colors"
+              style={{
+                fontFamily: 'serif',
+                color: activeCategory === 'sovo' ? '#ffffff' : '#C5B8A8'
+              }}
             >
-              {/* Unit Type Tabs */}
-              <div className="flex justify-center gap-4 mb-16 flex-wrap">
-                {(Object.keys(sovoUnits) as Array<'A' | 'B' | 'B1' | 'C' | 'D' | 'E'>).map((unit) => (
-                  <button
-                    key={unit}
-                    onClick={() => setSovoActiveUnit(unit)}
-                    className={`px-6 py-2 border-2 transition-all font-serif ${
-                      sovoActiveUnit === unit
-                        ? 'bg-amber-500/20 border-amber-500 text-white'
-                        : 'border-white/20 text-white/60 hover:border-white/40 hover:text-white'
-                    }`}
-                  >
-                    {unit}
-                  </button>
-                ))}
+              SOVO
+              {activeCategory === 'sovo' && (
+                <motion.div
+                  layoutId="categoryUnderline"
+                  className="absolute bottom-0 left-0 right-0 h-0.5 bg-amber-500"
+                  transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                />
+              )}
+            </button>
+            <button
+              onClick={() => {
+                setActiveCategory('soho');
+                setActiveUnit('A');
+              }}
+              className="relative pb-2 text-2xl tracking-wider transition-colors"
+              style={{
+                fontFamily: 'serif',
+                color: activeCategory === 'soho' ? '#ffffff' : '#C5B8A8'
+              }}
+            >
+              SOHO
+              {activeCategory === 'soho' && (
+                <motion.div
+                  layoutId="categoryUnderline"
+                  className="absolute bottom-0 left-0 right-0 h-0.5 bg-amber-500"
+                  transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                />
+              )}
+            </button>
+          </div>
+
+          {/* Unit Type Tabs */}
+          <div className="flex justify-center gap-8 mb-20">
+            {availableUnits.map((unit) => (
+              <button
+                key={unit}
+                onClick={() => setActiveUnit(unit)}
+                className="relative px-4 py-2 text-xl tracking-wider transition-all"
+                style={{
+                  fontFamily: 'serif',
+                  color: activeUnit === unit ? '#ffffff' : '#C5B8A8',
+                  border: activeUnit === unit ? '2px solid #FE9A00' : '2px solid transparent'
+                }}
+              >
+                {unit}
+              </button>
+            ))}
+          </div>
+
+          {/* Floor Plan Display */}
+          <motion.div
+            key={`${activeCategory}-${activeUnit}`}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start max-w-6xl mx-auto"
+          >
+            {/* Left Side: Unit Info & Elevation */}
+            <div className="space-y-8">
+              {/* Unit Name */}
+              <div>
+                <h2 
+                  className="text-4xl mb-2"
+                  style={{ 
+                    fontFamily: 'serif',
+                    color: '#ffffff'
+                  }}
+                >
+                  {currentUnit.name}
+                </h2>
+                <div 
+                  className="w-20 h-0.5 mb-6 bg-amber-500"
+                ></div>
+                
+                {/* Unit Area */}
+                <p 
+                  className="text-lg mb-8"
+                  style={{ color: '#ffffff' }}
+                >
+                  Unit Area <span style={{ fontFamily: 'serif' }}>{currentUnit.area}m²</span>
+                </p>
               </div>
 
-              {/* Unit Info */}
-              <div className="text-left mb-8">
-                <h2 className="text-4xl font-serif text-white mb-4">
-                  {sovoUnits[sovoActiveUnit].name}
-                </h2>
-                <div className="space-y-3">
-                  <div>
-                    <p className="text-white/60 text-sm">Unit Area</p>
-                    <p className="text-2xl text-amber-500 font-serif">
-                      {sovoUnits[sovoActiveUnit].area}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-white/60 text-sm">Level</p>
-                    <p className="text-white">{sovoUnits[sovoActiveUnit].levels}</p>
-                  </div>
+              {/* Elevation View */}
+              <div className="space-y-4">
+                <p 
+                  className="text-sm text-center"
+                  style={{ color: '#ffffff' }}
+                >
+                  East View (KL City View)
+                </p>
+                <div className="bg-white p-4 border border-black/10">
+                  <ImageWithFallback
+                    src={currentUnit.elevation}
+                    alt="Elevation View"
+                    className="w-full h-auto"
+                  />
+                </div>
+                <p 
+                  className="text-sm text-center"
+                  style={{ color: '#8B7D6B' }}
+                >
+                  West View (Facilities View)
+                </p>
+                <p 
+                  className="text-center mt-4"
+                  style={{ 
+                    color: '#4A4138',
+                    fontFamily: 'serif'
+                  }}
+                >
+                  {currentUnit.levels}
+                </p>
+              </div>
+            </div>
+
+            {/* Right Side: Floor Plan */}
+            <div className="relative">
+              {/* Dimensions Top */}
+              <div className="absolute -top-8 right-0 left-0 flex justify-end">
+                <div 
+                  className="text-xs tracking-wider"
+                  style={{ color: '#8B7D6B' }}
+                >
+                  {currentUnit.dimensions.width}
+                </div>
+              </div>
+              
+              {/* Dimensions Side */}
+              <div className="absolute -right-12 top-0 bottom-0 flex items-center">
+                <div 
+                  className="text-xs tracking-wider"
+                  style={{ 
+                    color: '#8B7D6B',
+                    writingMode: 'vertical-rl',
+                    transform: 'rotate(180deg)'
+                  }}
+                >
+                  {currentUnit.dimensions.height}
                 </div>
               </div>
 
-              {/* Unit Details - Images Side by Side */}
-              <motion.div
-                className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
+              {/* Floor Plan Image */}
+              <div className="bg-white border border-black/20">
+                <ImageWithFallback
+                  src={currentUnit.floorPlan}
+                  alt={`${currentUnit.name} Floor Plan`}
+                  className="w-full h-auto"
+                />
+              </div>
+
+              {/* Type Label */}
+              <p 
+                className="text-center mt-4"
+                style={{ 
+                  color: '#ffffff',
+                  fontFamily: 'serif'
+                }}
               >
-                {/* Image 1 */}
-                <motion.div
-                  className="border border-amber-500/30 overflow-hidden bg-gray-900 h-[250px]"
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.5 }}
-                  whileHover={{ borderColor: 'rgb(217, 119, 6)' }}
-                >
-                  <ImageWithFallback
-                    src={sovoUnits[sovoActiveUnit].images[0]}
-                    alt={`${sovoUnits[sovoActiveUnit].name} View 1`}
-                  />
-                </motion.div>
+                Type {activeUnit}
+              </p>
+            </div>
+          </motion.div>
 
-                {/* Image 2 */}
-                <motion.div
-                  className="border border-amber-500/30 overflow-hidden bg-gray-900 h-[250px]"
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.5, delay: 0.1 }}
-                  whileHover={{ borderColor: 'rgb(217, 119, 6)' }}
-                >
-                  <ImageWithFallback
-                    src={sovoUnits[sovoActiveUnit].images[1]}
-                    alt={`${sovoUnits[sovoActiveUnit].name} View 2`}
-                  />
-                </motion.div>
-              </motion.div>
-            </motion.div>
-          )}
-
-          {/* SOHO Section */}
-          {activeTab === 'soho' && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.5 }}
+          {/* CTA Button */}
+          <motion.div
+            className="text-center mt-16"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3 }}
+          >
+            <motion.a
+              href="/#lead-capture"
+              className="inline-block px-12 py-4 border-2 tracking-widest text-sm hover:bg-black/5 transition-all"
+              style={{
+                color: '#4A4138',
+                borderColor: '#4A4138'
+              }}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
             >
-              {/* Unit Type Tabs */}
-              <div className="flex justify-center gap-4 mb-16 flex-wrap">
-                {(Object.keys(sohoUnits) as Array<'A' | 'ACorner' | 'B'>).map((unit) => (
-                  <button
-                    key={unit}
-                    onClick={() => setSohoActiveUnit(unit)}
-                    className={`px-6 py-2 border-2 transition-all font-serif ${
-                      sohoActiveUnit === unit
-                        ? 'bg-amber-500/20 border-amber-500 text-white'
-                        : 'border-white/20 text-white/60 hover:border-white/40 hover:text-white'
-                    }`}
-                  >
-                    {unit === 'ACorner' ? 'A Corner' : unit}
-                  </button>
-                ))}
-              </div>
-
-              {/* Unit Info */}
-              <div className="text-left mb-8">
-                <h2 className="text-4xl font-serif text-white mb-4">
-                  {sohoActiveUnit === 'ACorner'
-                    ? sohoUnits.ACorner.name
-                    : sohoUnits[sohoActiveUnit].name}
-                </h2>
-                <div className="space-y-3">
-                  <div>
-                    <p className="text-white/60 text-sm">Unit Area</p>
-                    <p className="text-2xl text-amber-500 font-serif">
-                      {sohoActiveUnit === 'ACorner'
-                        ? sohoUnits.ACorner.area
-                        : sohoUnits[sohoActiveUnit].area}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-white/60 text-sm">Level</p>
-                    <p className="text-white">
-                      {sohoActiveUnit === 'ACorner'
-                        ? sohoUnits.ACorner.levels
-                        : sohoUnits[sohoActiveUnit].levels}
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Unit Details - Images Side by Side */}
-              <motion.div
-                className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-              >
-                {/* Image 1 */}
-                <motion.div
-                  className="border border-amber-500/30 overflow-hidden bg-gray-900 h-[350px]"
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.5 }}
-                  whileHover={{ borderColor: 'rgb(217, 119, 6)' }}
-                >
-                  <ImageWithFallback
-                    src={
-                      sohoActiveUnit === 'ACorner'
-                        ? sohoUnits.ACorner.images[0]
-                        : sohoUnits[sohoActiveUnit].images[0]
-                    }
-                    alt={`${
-                      sohoActiveUnit === 'ACorner'
-                        ? sohoUnits.ACorner.name
-                        : sohoUnits[sohoActiveUnit].name
-                    } View 1`}
-                    className="w-full h-full object-cover"
-                  />
-                </motion.div>
-
-                {/* Image 2 */}
-                <motion.div
-                  className="border border-amber-500/30 overflow-hidden bg-gray-900 h-[350px]"
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.5, delay: 0.1 }}
-                  whileHover={{ borderColor: 'rgb(217, 119, 6)' }}
-                >
-                  <ImageWithFallback
-                    src={
-                      sohoActiveUnit === 'ACorner'
-                        ? sohoUnits.ACorner.images[1]
-                        : sohoUnits[sohoActiveUnit].images[1]
-                    }
-                    alt={`${
-                      sohoActiveUnit === 'ACorner'
-                        ? sohoUnits.ACorner.name
-                        : sohoUnits[sohoActiveUnit].name
-                    } View 2`}
-                    className="w-full h-full object-cover"
-                  />
-                </motion.div>
-              </motion.div>
-            </motion.div>
-          )}
+              REQUEST FULL FLOOR PLAN
+            </motion.a>
+          </motion.div>
         </div>
       </section>
 
